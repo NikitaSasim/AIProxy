@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-
-
 def get_gpt_response(message):
     client = OpenAI()
     response = client.chat.completions.create(
@@ -20,14 +18,8 @@ def get_gpt_response(message):
 
     return response.choices[0].message.content
 
+
 def get_giga_response(message):
     with GigaChat(credentials=os.getenv('GIGACHAT_API_KEY'), verify_ssl_certs=False) as giga:
         response = giga.chat(message)
         return (response.choices[0].message.content)
-
-print(get_giga_response("Когда выгодно покупать доллар?"))
-
-
-
-
-
