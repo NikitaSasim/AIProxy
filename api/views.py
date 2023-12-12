@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from dotenv import load_dotenv
 import json
 import openai
-from .utils import get_gpt_response
+from .utils import get_gpt_response, get_giga_response
 
 load_dotenv()
 
@@ -28,3 +28,13 @@ class GptApiView(APIView):
             else:
 
                 return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class GigaApiView(APIView):
+
+    def post(self, request):
+
+        print(request.body)
+
+        answer = get_giga_response(json.loads(request.body))
+        return Response(answer, status=status.HTTP_200_OK)
