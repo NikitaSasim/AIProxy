@@ -44,7 +44,7 @@ def get_gpt_response(message):
 def get_giga_response(message):
     with GigaChat(credentials=os.getenv('GIGACHAT_API_KEY'), verify_ssl_certs=False) as giga:
         response = giga.chat(message)
-        return (response.choices[0].message.content)
+        return response.choices[0].message.content
 
 
 def validate_message(message, schema):
