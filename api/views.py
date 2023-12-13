@@ -3,15 +3,29 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import json
 import openai
-from .utils import get_gpt_response, get_giga_response
+import fastjsonschema
+from .utils import get_gpt_response, get_giga_response, validate_gpt
 
 
 class GptApiView(APIView):
 
+
     def post(self, request):
 
         try:
-            answer = get_gpt_response(json.loads(request.body))
+            messges = json.loads(request.body)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+        try:
+            validate_gpt(messges)
+        except fastjsonschema.JsonSchemaException as e:
+            return Response(f"Data failed validation: {e}", status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+
+        try:
+            answer = get_gpt_response(messges)
 
             return Response(answer, status=status.HTTP_200_OK)
 
